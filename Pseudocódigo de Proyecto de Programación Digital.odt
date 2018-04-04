@@ -1,0 +1,170 @@
+﻿Pseudocódigo de Proyecto de Programación Digital
+
+Inicio
+	char nombre1 = '';
+	char nombre2 = '';
+	int numRobot, ocupado, intento, i, j, h, x, y;
+	i = 0;
+	j = 0;
+	h = 0;
+	x = 0;
+	y = 0;
+	numRobot = 1;
+	ocupado = 1;
+	intento = 6;
+
+	Escribir: "Bienvenido a Decodificado.
+
+	Reglas del juego:
+	1.El juego se desenvuelve en un tablero, el cual es una cuadrícula de 6x6
+	2.Se solicitarán las coordenadas de cada uno de los robots
+	3.Una vez posicionados los 6 robots en el tablero, empieza el juego.
+	4.El jugador indicará una coordenada y si ese cuadro está ocupado por un robot, este será decodificado y esa casilla es libre.
+	5.El juego termina cuando se hayan decodificado todos los robots o se hayan agotado las oportunidades.";
+
+	Escribir: "Introduzca el nombre del 1er jugador:"
+	Leer: nombre1;
+	Escribir: "Introduzca el nombre del 2do jugador:"
+	Leer: nombre2;
+
+	//Inicializo la matriz tablero
+	Mientras(i < 6) Hacer
+	    Mientras(j < 6) Hacer
+	        tablero[i][j] = 0;
+	        j++;
+	    Fin Mientras
+	    j = 0;
+	    i++;
+	Fin Mientras
+
+	//Inicializo la matriz de respaldo
+	Mientras(i < 6) Hacer
+	    Mientras(j < 6) Hacer
+	        matriz[i][j] = 0;
+	        j++;
+	    Fin Mientras
+	    j = 0;
+	    i++;
+	Fin Mientras
+
+
+	//Lleno la matriz tablero
+	i = 0;
+	j = 0;
+
+	Mientras(numRobot < 7) Hacer
+		Escribir: "Ingrese la coordenada en X del robot n° ", numRobot;
+		Leer: i;
+		si((i < 0) v (i > 5)) entonces
+			Mientras((i < 0) v (i > 5)) Hacer
+				Escribir: "Esta posición no es válida. Intente otra posición";
+				Escribir: "Ingrese la coordenada en X del robot n° ",numRobot;
+				Leer: i;
+			Fin Mientras
+		Fin Mientras
+		Escribir: "Ingrese la coordenada en Y del robot n° ", numRobot;
+		Leer: j;
+		si((j > 4) v (j < 0)) entonces
+			Mientras((j > 4) v (j < 0)) Hacer
+				Escribir: "Esta posición no es válida. Intente otra posición";
+				Escribir: "Ingrese la coordenada en Y del robot n° ", numRobot;
+				Leer: j;
+			Fin Mientras
+		fin si
+		Desde (t = 0; t < 6; ++t)
+			si(tablero[i][t] != 0) entonces
+				h++;
+			fin si
+		Fin Desde
+		si(h > 0) entonces
+			h = 0;
+			Escribir: "---------------------------------------------";
+			Escribir: "Esta fila está llena. Intente otra posición";
+			Escribir: "---------------------------------------------";
+		sino
+			tablero[i][j] = ocupado;
+			matriz[i][j] = ocupado;
+			tablero[i][j+1] = ocupado;
+			matriz[i][j+1] = ocupado;
+			numRobot++;
+			ocupado++;
+		fin si
+	Fin Mientras
+
+	Mientras(intento > 0) Hacer
+		Escribir: "Listo, ", nombre2, ". Ingrese las coordenadas solicitadas para decodificar los robots" ;
+		Escribir: "Tiene ", intento, " intentos.";
+		Escribir: "Ingrese la coordenada en X";
+		Leer: x;
+		si((x < 0) v (x > 5)) entonces
+			Mientras((x < 0) v (x > 5)) Hacer
+				Escribir: "Esta posición no es válida. Intente otra posición";
+				Escribir: "Ingrese la coordenada en X";
+				Leer: x;
+			Fin Mientras
+		fin si
+		Escribir: "Ingrese la coordenada en Y";
+		Leer: y;
+		si((y > 4) v (y < 0)) entonces
+			Mientras((y > 4) v (y < 0)) Hacer
+				Escribir: "Esta posición no es válida. Intente otra posición";
+				Escribir: "Ingrese la coordenada en Y";
+				Leer: y;	
+			Fin Mientras
+		fin si
+		si (tablero[x][y] != 0) entonces
+			si(tablero[x][y] == tablero[x][y+1]) entonces
+
+				tablero[x][y] = 0;
+				tablero[x][y+1] = 0;
+
+				h = 0;
+				Desde (w = 0; w < 6; ++w)
+					Desde (l = 0; l < 6; ++l)
+						si(tablero[w][l] == 0) entonces
+							h++;
+						fin si
+					Fin Desde
+				Fin Desde
+				si(h == 36) entonces
+					Escribir: "---------------------------";
+					Escribir: nombre2, " ha ganado.";
+					Escribir: "---------------------------";
+				sino
+					Escribir: "Decodificó un robot. Tiene otra oportunidad.";
+			sino
+				tablero[x][y] = 0;
+				tablero[x][y-1] = 0;
+
+				h = 0;
+				Desde (w = 0; w < 6; ++w)
+					Desde (l = 0; l < 6; ++l)
+						si(tablero[w][l] == 0) entonces
+							h++;
+						fin si
+					Fin Desde
+				Fin Desde
+				si(h == 36) entonces
+					Escribir: "---------------------------";
+					Escribir: nombre2, " ha ganado.";
+					Escribir: "---------------------------";
+				sino
+					Escribir: "Decodificó un robot. Tiene otra oportunidad.";
+		sino
+			intento--;
+			Escribir: "No Decodificó ningún robot. Ha perdido una oportunidad.";
+		fin si
+	Fin Mientras
+
+	si (intento == 0) entonces
+		Escribir: "---------------------------------------------";
+		Escribir: nombre2, " ha perdido. Se ha quedado sin intentos\n";
+		Escribir: "---------------------------------------------";
+		//Blucle para mostrar matriz de respaldo, donde las posiciones son las iniciales
+		Desde (i = 0; i < 6; i++)
+			Desde (j = 0; j < 6; j++)
+				Escribir: matriz[i][j];							
+			Fin Desde
+		Fin Desde
+	fin si
+Fin

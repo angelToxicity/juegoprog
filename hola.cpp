@@ -200,10 +200,6 @@ int main(int argc, char const *argv[])
 			printf("\n");
 		}
 	}
-	cout << "¿Desea volver a jugar?\n" << endl;
-	cout << "Introduzca s para continuar el juego." << endl;
-	cout << "Introduzca n para finalizar el juego." << endl;
-	cin >> vuelta;
 /*	else{
 	cout << endl;
 	cout << "---------------------------------------------" << endl;
